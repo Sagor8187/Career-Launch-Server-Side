@@ -32,9 +32,23 @@ async function run() {
       res.status(201).send({success: true,message: "Job created successfully",result});
     })
 
+    app.get("/api/jobs",async(req,res)=>{
+      const query = {}
+      if(req.query.companyId){
+        query.companyId = req.query.companyId
+      }
 
-    // Connect the client to the server	(optional starting in v4.7)
+       if(req.query.status){
+        query.status = req.query.status
+      }
+  
+      const  cursor =await Jobcollection.find(query)
+      const result =await cursor.toArray()
    
+      res.send(result)
+    })
+
+    
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
