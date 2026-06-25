@@ -24,6 +24,7 @@ async function run() {
      await client.connect();
      const database = client.db("job-portal");
     const Jobcollection = database.collection("jobs");
+    const  companycollection = database.collection("company")
 
     //Recruiter Job post api 
     app.post("/api/jobs",async(req,res)=>{
@@ -32,6 +33,8 @@ async function run() {
       res.status(201).send({success: true,message: "Job created successfully",result});
     })
 
+    
+    // company base job show 
     app.get("/api/jobs",async(req,res)=>{
       const query = {}
       if(req.query.companyId){
@@ -46,6 +49,12 @@ async function run() {
       const result =await cursor.toArray()
    
       res.send(result)
+    })
+
+    app.post("/api/company",async(req,res)=>{
+      const company = req.body;
+      const result = await companycollection.insertOne(company)
+      res.status(201).send({success: true,message: "Job created successfully",result});
     })
 
     
