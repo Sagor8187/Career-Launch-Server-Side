@@ -51,12 +51,26 @@ async function run() {
       res.send(result)
     })
 
-    app.post("/api/company",async(req,res)=>{
+    // comapny registration api 
+
+    app.post("/api/registration/company",async(req,res)=>{
       const company = req.body;
       const result = await companycollection.insertOne(company)
       res.status(201).send({success: true,message: "Job created successfully",result});
     })
 
+
+    // company data get api 
+    app.get("/api/my/companies",async(req,res)=>{
+      const query = {}
+      if(req.query.recruiterId){
+        query.recruiterId = req.query.recruiterId;
+      }
+
+      const result = await companycollection.findOne(query)
+      res.send(result)
+    })
+    
     
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
@@ -68,11 +82,6 @@ async function run() {
 }
 run().catch(console.dir);
 
-
-
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
