@@ -68,7 +68,7 @@ async function run() {
       }
 
       const result = await companycollection.findOne(query)
-      res.send(result)
+      res.send(result || {})
     })
     
     
