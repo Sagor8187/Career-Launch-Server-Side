@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require("cors");
 const app = express()
 const port = 5000
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config()
 app.use(cors())
 app.use(express.json());
@@ -26,9 +26,33 @@ async function run() {
     const Jobcollection = database.collection("jobs");
     const  companycollection = database.collection("company")
 
+
+
+    // all job api 
+    app.get("/api/all/jobs", async (req, res) => {
+    const result = await Jobcollection.find().toArray();
+
+    res.send(result);
+  });
+
+  // job details api 
+
+  app.get("/api/all/jobs/:id", async (req, res) => {
+  const { id } = req.params;
+
+  const result = await Jobcollection.findOne({
+    _id: new ObjectId(id),
+  });
+
+  res.send(result);
+});
+
     //Recruiter Job post api 
     app.post("/api/jobs",async(req,res)=>{
-      const job = req.body;
+      const job = {
+         ...req.body,
+          createdAt: new Date(),
+        };
       const result =await Jobcollection.insertOne(job)
       res.status(201).send({success: true,message: "Job created successfully",result});
     })
