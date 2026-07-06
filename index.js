@@ -25,6 +25,7 @@ async function run() {
      const database = client.db("job-portal");
     const Jobcollection = database.collection("jobs");
     const  companycollection = database.collection("company")
+    const applicationcollection = database.collection("application")
 
 
 
@@ -95,6 +96,18 @@ async function run() {
       res.send(result || {})
     })
     
+
+    // create a apllicant post api 
+
+    app.post("/api/application",async(req,res)=>{
+      const aplicant = {
+        ...req.body,
+        createdAt: new Date()
+      }
+      const result = await applicationcollection.insertOne(aplicant)
+       res.status(201).send({success: true,message: "Job apply successfully",result});
+      
+    })
     
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
@@ -102,9 +115,10 @@ async function run() {
   } finally {
     // Ensures that the client will close when you finish/error
     // await client.close();
-  }
+   }
 }
 run().catch(console.dir);
+
 
 
 app.listen(port, () => {
