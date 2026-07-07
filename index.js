@@ -108,6 +108,18 @@ async function run() {
        res.status(201).send({success: true,message: "Job apply successfully",result});
       
     })
+
+    app.get("/api/application",async(req,res)=>{
+      const query = {}
+      if(req.query.jobId){
+        query.jobId = req.query.jobId
+      }
+      if(req.query.applicantId){
+        query.applicantId = req.query.applicantId
+      }
+      const result = await applicationcollection.find(query).toArray()
+       res.status(201).send({success: true,result});
+    })
     
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
