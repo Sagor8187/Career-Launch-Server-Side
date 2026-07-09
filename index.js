@@ -26,6 +26,7 @@ async function run() {
     const Jobcollection = database.collection("jobs");
     const  companycollection = database.collection("company")
     const applicationcollection = database.collection("application")
+    const plancollection = database.collection("plans")
 
 
 
@@ -109,6 +110,7 @@ async function run() {
       
     })
 
+    // get apllication data 
     app.get("/api/application",async(req,res)=>{
       const query = {}
       if(req.query.jobId){
@@ -121,6 +123,16 @@ async function run() {
        res.status(201).send({success: true,result});
     })
     
+// get planing data 
+app.get("/api/plans",async(req,res)=>{
+  const query = {}
+  if(req.query.plan_id){
+    query.id=req.query.plan_id
+  }
+  const plan = await plancollection.findOne(query)
+  res.send(plan)
+})
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
